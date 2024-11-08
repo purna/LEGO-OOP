@@ -27,7 +27,7 @@ namespace Unity.LEGO.EditorExt
 
              // Draw the default inspector
             DrawDefaultInspector();
-     
+
             if (AnimationsProp != null)
             {
 
@@ -51,13 +51,14 @@ namespace Unity.LEGO.EditorExt
                         {
                             controller.PlayAnimation((MinifigFaceAnimationController.FaceAnimation)(AnimationsProp.GetArrayElementAtIndex(i).enumValueIndex));
                         }
+                        
                         EditorGUI.EndDisabledGroup();
                         EditorGUILayout.EndHorizontal();
                     }
                 }
             }
         }
-       
+
     }
 
 }

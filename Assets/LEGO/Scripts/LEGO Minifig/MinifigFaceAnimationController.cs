@@ -1,10 +1,10 @@
-﻿using System;
+﻿// MinifigFaceAnimationController.cs
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Unity.LEGO.Minifig
 {
-
     public class MinifigFaceAnimationController : MonoBehaviour
     {
         public enum FaceAnimation
@@ -31,79 +31,119 @@ namespace Unity.LEGO.Minifig
             public Texture2D[] textures;
         }
 
-        
-        
-         #if UNITY_EDITOR
-        [Header("Animation")]
-       #endif
-
-       
         [SerializeField]
-        [Tooltip("This is the tag name of your face object. Drag the prefab onto the scene to select the face oject and assign a tag 'Face'.")]
-        private string faceTag = "Face"; // Tag of the child object you want to find
+        [Tooltip("This is the tag name of your face object. Drag the prefab onto the scene to select the face object and assign a tag 'Face'.")]
+        private string faceTag = "Face";
 
-
-        [HideInInspector,SerializeField]
+        [SerializeField]
         private Transform face;
+
+        [SerializeField]
+        [Tooltip("Frames per second for the animation. Can be set dynamically in PlayAnimation.")]
+        private float framesPerSecond = 24.0f; // Default FPS
+
         [SerializeField]
         [Tooltip("The default texture of the minifigure")]
-        Texture2D defaultTexture;
-         [SerializeField]
-        List<FaceAnimation> animations = new List<FaceAnimation>();
-         [SerializeField]
-        List<AnimationData> animationData = new List<AnimationData>() ;
+        private Texture2D defaultTexture;
 
-        Material faceMaterial;
+        [SerializeField]
+        private List<FaceAnimation> animations = new List<FaceAnimation>();
 
-        bool playing;
+        [SerializeField]
+        private List<AnimationData> animationData = new List<AnimationData>();
 
-        AnimationData currentAnimationData;
-         float currentFrame;
-         int showingFrame;
-   
-        float framesPerSecond;
+        private Material faceMaterial;
+        private bool playing;
+        private AnimationData currentAnimationData;
+        private float currentFrame;
+        private int showingFrame;
 
     
-         int shaderTextureId;
-        public void Init(Transform face, Texture2D defaultTexture)
-        {
-       
-            this.face = face;
-            this.defaultTexture = defaultTexture;
-        }
 
-        public void AddAnimation(FaceAnimation animation, Texture2D[] textures)
+        private int shaderTextureId;
+
+        void Start()
         {
-            if (!animations.Contains(animation))
+            if (face == null)
             {
-                animations.Add(animation);
-                var animationData = new AnimationData();
-                animationData.textures = textures;
-                this.animationData.Add(animationData);
+                FindAndAssignFaceByTag();
+            }
+
+            if (face != null)
+            {
+                Renderer faceRenderer = face.GetComponent<Renderer>();
+                if (faceRenderer != null)
+                {
+                    faceMaterial = faceRenderer.material;
+                    shaderTextureId = Shader.PropertyToID("_BaseMap");
+                    
+                    // Set initial texture
+                    if (defaultTexture != null)
+                    {
+                        faceMaterial.SetTexture(shaderTextureId, defaultTexture);
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"No Renderer component found on face object '{face.name}'");
+                }
             }
             else
             {
-                Debug.LogErrorFormat("Face animation controller already contains animation {0}", animation);
+                Debug.LogError($"No face object found with tag '{faceTag}'");
             }
         }
 
-        public bool HasAnimation(FaceAnimation animation)
+        void Update()
         {
-            return animations.IndexOf(animation) >= 0;
+            if (playing && currentAnimationData != null)
+            {
+                currentFrame += Time.deltaTime * framesPerSecond;
+                var wholeFrame = Mathf.FloorToInt(currentFrame);
+
+                if (wholeFrame != showingFrame)
+                {
+                    if (wholeFrame >= currentAnimationData.textures.Length)
+                    {
+                        if (defaultTexture != null)
+                        {
+                            faceMaterial.SetTexture(shaderTextureId, defaultTexture);
+                        }
+                        playing = false;
+                    }
+                    else if (currentAnimationData.textures[wholeFrame] != null)
+                    {
+                        faceMaterial.SetTexture(shaderTextureId, currentAnimationData.textures[wholeFrame]);
+                        showingFrame = wholeFrame;
+                    }
+                }
+            }
         }
 
-        public void PlayAnimation(FaceAnimation animation, float framesPerSecond = 24.0f)
+        public void PlayAnimation(FaceAnimation animation, float fps = 24.0f)
         {
-            var animationIndex = animations.IndexOf(animation);
-            if (animationIndex < 0)
+            if (!Application.isPlaying)
             {
-                Debug.LogErrorFormat("Face animation controller does not contatin animation {0}", animation);
+                Debug.LogWarning("Cannot play animations in edit mode");
                 return;
             }
 
-            if (framesPerSecond <= 0.0f)
+            var animationIndex = animations.IndexOf(animation);
+            if (animationIndex < 0)
+            {
+                Debug.LogError($"Animation '{animation}' not found in the animations list");
+                return;
+            }
+
+            if (fps <= 0.0f)
             {
                 Debug.LogError("Frames per second must be positive");
+                return;
+            }
+
+            if (faceMaterial == null)
+            {
+                Debug.LogError("Face material not initialized");
                 return;
             }
 
@@ -111,132 +151,58 @@ namespace Unity.LEGO.Minifig
             currentAnimationData = animationData[animationIndex];
             currentFrame = 0.0f;
             showingFrame = -1;
-            this.framesPerSecond = framesPerSecond;
-
+            framesPerSecond = fps; // Set the animation's FPS here
         }
 
-        void Start()
+        private void FindAndAssignFaceByTag()
         {
-            
-            //FindAndAssignGrandchild();
-
-            FindAndAssignGrandchildByTag();
-
-            // Use the script's own transform as the starting point
-            //Transform rootObject = transform;
-
-            // Find the descendant called "Face" under the root object
-            //face = rootObject.Find("Face");
-
-            if (face != null)
-            {
-
-                Debug.Log("Found object: " + face.gameObject.name);
-
-                Renderer faceRenderer = face.GetComponent<Renderer>();
-
-                // Check if the Renderer component was found
-                if (faceRenderer != null)
-                {
-                    // Get the material of the Renderer component
-                    faceMaterial = faceRenderer.material;
-
-                    // Log the name of the found object and the material
-                    Debug.Log("Found object: " + face.gameObject.name);
-                    Debug.Log("Material: " + faceMaterial.name);
-                }
-                else
-                {
-                    Debug.LogError("Renderer component not found on 'Face' object!");
-                }
-            }
-            
-            
-            //faceMaterial = face.GetComponent<Renderer>().material;
-            shaderTextureId = Shader.PropertyToID("_BaseMap");
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (playing)
-            {
-                currentFrame += Time.deltaTime * framesPerSecond;
-
-                var wholeFrame = Mathf.FloorToInt(currentFrame);
-                if (wholeFrame != showingFrame)
-                {
-                    if (wholeFrame >= currentAnimationData.textures.Length)
-                    {
-                        faceMaterial.SetTexture(shaderTextureId, defaultTexture);
-                        playing = false;
-                    }
-                    else
-                    {
-                        faceMaterial.SetTexture(shaderTextureId, currentAnimationData.textures[wholeFrame]);
-                        showingFrame = wholeFrame;
-                    }
-                }
-
-            }
-        }
-
-
-        // Make the 'animations' property accessible from other scripts
-        public void PlayAllAnimationsList()
-        {
-            List<MinifigFaceAnimationController.FaceAnimation> animationsList = animations;
-
-            // Loop through the animationList 
-           foreach (var animation in animationsList)
-            {                
-                if (animation.ToString() != null)
-                {
-                    //Debug.Log("Animations: " + animation.ToString() );
-                    PlayAnimation(animation);
-                }
-            }
-        }
-
-        public void PlayAnimationsFromList(int i)
-        {       
-                List<MinifigFaceAnimationController.FaceAnimation> animationsList = animations;
-
-                if (animationsList[i].ToString() != null)
-                {
-                    // Debug.Log("Animations: " + animationsList[i].ToString() );
-                    PlayAnimation(animationsList[i]);
-                }
-        }
-
-
-        private void FindAndAssignGrandchildByTag()
-        {
-            // Iterate through all children of the GameObject with the script
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform child = transform.GetChild(i);
-
-                // Check if the child has the specified tag
-                if (child.CompareTag(faceTag))
-                {
-                    // Assign the transform of the found grandchild to the serialized Transform field
-                    face = child;
-
-                    // Log the name of the found grandchild
-                    Debug.Log("Found grandchild object with tag '" + faceTag + "': " + child.gameObject.name);
-
-                    // Stop searching as want only want to find the first matching child
-                    break;
-                }
-            }
-
+            face = transform.Find(faceTag);
             if (face == null)
             {
-                Debug.LogError("Grandchild object with tag '" + faceTag + "' not found!");
+                Debug.LogError($"No face object found with tag '{faceTag}'");
             }
         }
-        
-    } 
 
+        // Helper methods for animation management
+        public void AddAnimation(FaceAnimation animation, Texture2D[] textures)
+        {
+            if (!animations.Contains(animation))
+            {
+                animations.Add(animation);
+                var newAnimationData = new AnimationData { textures = textures };
+                animationData.Add(newAnimationData);
+            }
+        }
+
+        public bool HasAnimation(FaceAnimation animation)
+        {
+            return animations.Contains(animation);
+        }
+
+        public void StopAnimation()
+        {
+            playing = false;
+            if (defaultTexture != null && faceMaterial != null)
+            {
+                faceMaterial.SetTexture(shaderTextureId, defaultTexture);
+            }
+        }
+
+        public void TriggerAnimation(FaceAnimation animation, float fps = 24.0f)
+        {
+            if (HasAnimation(animation))
+            {
+                PlayAnimation(animation, fps);
+            }
+            else
+            {
+                Debug.LogError($"Animation '{animation}' not found in the animations list");
+            }
+        }
+
+        public List<FaceAnimation> GetAvailableAnimations()
+        {
+            return animations;
+        }
+    }
 }
