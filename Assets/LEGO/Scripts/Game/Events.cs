@@ -8,6 +8,8 @@ namespace Unity.LEGO.Game
         public static OptionsMenuEvent OptionsMenuEvent = new OptionsMenuEvent();
         public static ObjectiveAdded ObjectiveAddedEvent = new ObjectiveAdded();
         public static VariableAdded VariableAddedEvent = new VariableAdded();
+
+        public static InfoAdded InfoAddedEvent = new InfoAdded();
         public static GameOverEvent GameOverEvent = new GameOverEvent();
         public static LookSensitivityUpdateEvent LookSensitivityUpdateEvent = new LookSensitivityUpdateEvent();
     }
@@ -27,6 +29,12 @@ namespace Unity.LEGO.Game
     public class VariableAdded : GameEvent
     {
         public Variable Variable;
+    }
+
+
+    public class InfoAdded : GameEvent
+    {
+        public Info Info;
     }
 
     public class GameOverEvent : GameEvent

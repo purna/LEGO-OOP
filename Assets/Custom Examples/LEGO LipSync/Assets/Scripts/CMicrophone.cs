@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System.IO;
+using System;
+
 //====================================================================================================
 //          CMicrophone
 //====================================================================================================
@@ -36,6 +39,8 @@ public class CMicrophone : MonoBehaviour
     private     AudioSource                         m_AudioSource;
     // Lipsync Analyzer, so we can feed Spectrum data to it
     private     CMouthAnalyzer                      m_CMouthAnalyzer        =   null;
+
+    private bool isRecording = false;
 //================================================================================================
 //  Init
 //================================================================================================
@@ -170,6 +175,15 @@ public class CMicrophone : MonoBehaviour
         {
             Reinitialise();
         }
+
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            StartRecording();
+        }
+        else if (Input.GetKeyUp(KeyCode.S))
+        {
+            StopRecordingAndSave();
+        }
     }
     void FixedUpdate()
     {
@@ -194,4 +208,83 @@ public class CMicrophone : MonoBehaviour
             } else {  Debug.Log( "AudioSource does not exist" );  }
         } else {  Debug.Log( "CMouthAnalyzer does not exist" );  }
     }
+
+
+
+
+    private void Start()
+    {
+        // Initialize as before
+        LookUpMicrophoneDevices();
+        InitialiseMicrophoneInput();
+    }
+
+    public void StartRecording()
+    {
+        isRecording = true;
+        m_AudioSource.clip = Microphone.Start(m_sSelectedMicSource, m_bAudioLoop, m_iClipLengthInSeconds, m_iFrequency);
+        StartCoroutine(WaitForMicrophone());
+        m_AudioSource.Play();
+    }
+
+    public void StopRecordingAndSave()
+    {
+        if (isRecording)
+        {
+            isRecording = false;
+            Microphone.End(m_sSelectedMicSource);
+            SaveRecording(m_AudioSource.clip, "Recording.wav");
+        }
+    }
+
+    private void SaveRecording(AudioClip clip, string filename)
+    {
+        string path = Path.Combine(Application.persistentDataPath, filename);
+        Debug.Log("Saving recording to: " + path);
+
+        using (FileStream fileStream = new FileStream(path, FileMode.Create))
+        {
+            byte[] wavData = ConvertToWAV(clip);
+            fileStream.Write(wavData, 0, wavData.Length);
+        }
+    }
+
+    private byte[] ConvertToWAV(AudioClip clip)
+    {
+        float[] samples = new float[clip.samples * clip.channels];
+        clip.GetData(samples, 0);
+
+        int sampleCount = samples.Length;
+        int byteCount = sampleCount * sizeof(short);
+        byte[] bytes = new byte[44 + byteCount];
+
+        // WAV Header
+        Buffer.BlockCopy(System.Text.Encoding.UTF8.GetBytes("RIFF"), 0, bytes, 0, 4);
+        BitConverter.GetBytes(36 + byteCount).CopyTo(bytes, 4);
+        Buffer.BlockCopy(System.Text.Encoding.UTF8.GetBytes("WAVE"), 0, bytes, 8, 4);
+        Buffer.BlockCopy(System.Text.Encoding.UTF8.GetBytes("fmt "), 0, bytes, 12, 4);
+        BitConverter.GetBytes(16).CopyTo(bytes, 16);
+        BitConverter.GetBytes((short)1).CopyTo(bytes, 20);
+        BitConverter.GetBytes((short)clip.channels).CopyTo(bytes, 22);
+        BitConverter.GetBytes(clip.frequency).CopyTo(bytes, 24);
+        BitConverter.GetBytes(clip.frequency * clip.channels * sizeof(short)).CopyTo(bytes, 28);
+        BitConverter.GetBytes((short)(clip.channels * sizeof(short))).CopyTo(bytes, 32);
+        BitConverter.GetBytes((short)16).CopyTo(bytes, 34);
+        Buffer.BlockCopy(System.Text.Encoding.UTF8.GetBytes("data"), 0, bytes, 36, 4);
+        BitConverter.GetBytes(byteCount).CopyTo(bytes, 40);
+
+        // WAV Data
+        int offset = 44;
+        for (int i = 0; i < samples.Length; i++)
+        {
+            short sample = (short)(samples[i] * short.MaxValue);
+            BitConverter.GetBytes(sample).CopyTo(bytes, offset);
+            offset += 2;
+        }
+
+        return bytes;
+    }
+
+    // Existing methods (LookUpMicrophoneDevices, InitialiseMicrophoneInput, etc.)
+
 }
