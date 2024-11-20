@@ -467,6 +467,12 @@ Transform:
   m_Father: {fileID: 1583738738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &49007032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2933966177634658867, guid: 62d27db98dd8445ed9712bc0522caaf0,
+    type: 3}
+  m_PrefabInstance: {fileID: 778948835}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &49007033 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
@@ -7365,7 +7371,7 @@ PrefabInstance:
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.0400047
+      value: -5.15
       objectReference: {fileID: 0}
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
@@ -7385,17 +7391,17 @@ PrefabInstance:
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 703449490840833377, guid: 62d27db98dd8445ed9712bc0522caaf0,
         type: 3}
@@ -15597,10 +15603,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7f6e9256fd74e62bdf6203c2dd5ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToAttach: {fileID: 935007503}
+  objectToAttach: {fileID: 49007032}
   handTag: RightHand
   attachDistance: 1
   attachDuringAnimation: 1
+  positionOffset: {x: -0.19, y: 0.09, z: -0.01}
+  rotationOverride: {x: 0, y: 90, z: 4.72}
 --- !u!95 &1736517076
 Animator:
   serializedVersion: 5
@@ -23203,8 +23211,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToAttach: {fileID: 935007503}
   handTag: RightHand
-  attachDistance: 100
+  attachDistance: 1
   attachDuringAnimation: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOverride: {x: 0, y: 0, z: 0}
 --- !u!4 &6450877742719063558
 Transform:
   m_ObjectHideFlags: 0
