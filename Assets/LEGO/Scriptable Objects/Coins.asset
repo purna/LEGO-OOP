@@ -15,4 +15,4 @@ MonoBehaviour:
   Name: Coins
   InitialValue: 0
   UseUI: 1
-  UI: {fileID: 8322339850511969721, guid: 23a69938a7b26480584833263bba8431, type: 3}
+  UI: {fileID: 8322339850511969721, guid: 7941d64ed4b764e8cb4f6843b2c826cc, type: 3}
