@@ -23,9 +23,13 @@ public class CanvasClockwiseReveal : MonoBehaviour
 
         // Wait for the delay and then start the reveal
         StartCoroutine(ClockwiseReveal());
+
+        //StartCoroutine(HorizontalWipe(canvasPanel,  swipeDuration));
     }
 
     private IEnumerator ClockwiseReveal()
+
+    
     {
         // Wait for the reveal delay before starting the swipe
         yield return new WaitForSeconds(revealDelay);
@@ -47,6 +51,25 @@ public class CanvasClockwiseReveal : MonoBehaviour
         revealMaskImage.fillAmount = endFillAmount;
     }
 
+
+    public IEnumerator HorizontalWipe(RectTransform mask, float duration)
+    {
+        float elapsedTime = 0f;
+        Vector2 startSize = mask.sizeDelta;
+        Vector2 targetSize = new Vector2(0, mask.sizeDelta.y); // Start completely hidden, then wipe right
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            mask.sizeDelta = Vector2.Lerp(startSize, targetSize, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        mask.sizeDelta = targetSize;
+    }
+
+    
     // You can call this method to trigger the clockwise reveal manually
     public void TriggerClockwiseReveal()
     {
