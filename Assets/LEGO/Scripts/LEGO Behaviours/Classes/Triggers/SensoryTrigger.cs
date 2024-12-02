@@ -21,7 +21,12 @@ namespace Unity.LEGO.Behaviours.Triggers
 
         protected HashSet<SensoryCollider> m_ActiveColliders = new HashSet<SensoryCollider>();
 
+         // Public read-only property to expose m_ActiveColliders
+        public HashSet<SensoryCollider> ActiveColliders => m_ActiveColliders;
+
         protected HashSet<Brick> m_ConnectedBricks;
+
+     
 
         protected override void Awake()
         {

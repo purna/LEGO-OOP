@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -290,8 +289,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Play Again
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14e522e426f5472a8c9710aa5b252b7, type: 2}
-  m_sharedMaterial: {fileID: -6656905189396515994, guid: a14e522e426f5472a8c9710aa5b252b7,
+  m_fontAsset: {fileID: 11400000, guid: 888ba07f3ecb44058a8e8c4ac115b08c, type: 2}
+  m_sharedMaterial: {fileID: -2082054820972272263, guid: 888ba07f3ecb44058a8e8c4ac115b08c,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -311,12 +310,12 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.45
+  m_fontSize: 32
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -680,6 +679,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -990,6 +990,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
         type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 888ba07f3ecb44058a8e8c4ac115b08c,
+        type: 2}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_textAlignment
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -2082054820972272263, guid: 888ba07f3ecb44058a8e8c4ac115b08c,
+        type: 2}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
       propertyPath: m_textInfo.lineCount
       value: 0
       objectReference: {fileID: 0}
@@ -1001,6 +1028,16 @@ PrefabInstance:
     - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
         type: 3}
       propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4016311465174406545, guid: 6b23e1fc73ddf414eb915223522f6e6c,
@@ -1318,6 +1355,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7280566984937460588, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280566984937460588, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280566984937460588, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280566984937460588, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7779796920239501591, guid: 6b23e1fc73ddf414eb915223522f6e6c,
         type: 3}
       propertyPath: m_textInfo.lineCount
@@ -1387,6 +1444,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Controls
+      objectReference: {fileID: 0}
+    - target: {fileID: 8623899160396571542, guid: 6b23e1fc73ddf414eb915223522f6e6c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713904811624675375, guid: 6b23e1fc73ddf414eb915223522f6e6c,
         type: 3}
@@ -1863,8 +1925,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '[You won!]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14e522e426f5472a8c9710aa5b252b7, type: 2}
-  m_sharedMaterial: {fileID: -6656905189396515994, guid: a14e522e426f5472a8c9710aa5b252b7,
+  m_fontAsset: {fileID: 11400000, guid: 888ba07f3ecb44058a8e8c4ac115b08c, type: 2}
+  m_sharedMaterial: {fileID: -2082054820972272263, guid: 888ba07f3ecb44058a8e8c4ac115b08c,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1884,7 +1946,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1999,8 +2061,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Menu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14e522e426f5472a8c9710aa5b252b7, type: 2}
-  m_sharedMaterial: {fileID: -6656905189396515994, guid: a14e522e426f5472a8c9710aa5b252b7,
+  m_fontAsset: {fileID: 11400000, guid: 888ba07f3ecb44058a8e8c4ac115b08c, type: 2}
+  m_sharedMaterial: {fileID: -2082054820972272263, guid: 888ba07f3ecb44058a8e8c4ac115b08c,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2020,7 +2082,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2

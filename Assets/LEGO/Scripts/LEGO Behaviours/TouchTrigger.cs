@@ -1,7 +1,12 @@
+using LEGOModelImporter;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Unity.LEGO.Behaviours.Triggers
 {
     public class TouchTrigger : SensoryTrigger
     {
+  
         protected override void Reset()
         {
             base.Reset();
