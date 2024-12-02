@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class QuestionCollection : MonoBehaviour
 {
-    [Header("ScriptableObject for Questions (optional)")]
-    public QuestionData scriptableQuestion; // Drag a ScriptableObject here if available
+    [Header("ScriptableObjects for Questions (optional)")]
+    [Tooltip("Array of scriptable objects to use for quiz questions.")]
+    public QuestionData[] scriptableQuestions; // Array of ScriptableObject questions
 
     private QuizQuestion[] allQuestions;
 
     private void Awake()
     {
-        if (scriptableQuestion != null)
+        if (scriptableQuestions != null && scriptableQuestions.Length > 0)
         {
-            // Load a single question from ScriptableObject
-            LoadQuestionFromScriptableObject();
+            // Load questions from the array of ScriptableObjects
+            LoadQuestionsFromScriptableObjects();
         }
         else
         {
@@ -28,20 +29,22 @@ public class QuestionCollection : MonoBehaviour
         }
     }
 
-    private void LoadQuestionFromScriptableObject()
+    private void LoadQuestionsFromScriptableObjects()
     {
-        // Convert AnswerData[] to string[] for QuizQuestion
-        string[] answerTexts = scriptableQuestion.answers.Select(a => a.answerText).ToArray();
-
-        allQuestions = new QuizQuestion[]
+        // Convert each ScriptableObject into a QuizQuestion
+        allQuestions = scriptableQuestions.Select(scriptableQuestion =>
         {
-            new QuizQuestion
+            // Convert AnswerData[] to string[] for QuizQuestion
+            string[] answerTexts = scriptableQuestion.answers.Select(a => a.answerText).ToArray();
+
+            return new QuizQuestion
             {
                 Question = scriptableQuestion.question,
                 Answers = answerTexts,
-                CorrectAnswer = scriptableQuestion.correctAnswer
-            }
-        };
+                CorrectAnswer = scriptableQuestion.correctAnswer,
+                QuestionImage = scriptableQuestion.questionImage // Optional question image
+            };
+        }).ToArray();
     }
 
     private void LoadAllQuestions()

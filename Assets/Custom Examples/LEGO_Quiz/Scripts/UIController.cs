@@ -7,6 +7,7 @@ public class UIController : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private TMP_Text questionText; // For the question text
+    [SerializeField] private Image questionImage; // For the question text
     [SerializeField] private GameObject answerButtonContainer; // Parent GameObject containing all answer buttons
     [SerializeField] private GameObject correctAnswerPopup; // Correct answer popup
     [SerializeField] private GameObject wrongAnswerPopup; // Wrong answer popup
@@ -25,6 +26,18 @@ public class UIController : MonoBehaviour
         wrongAnswerPopup.SetActive(false);
 
         questionText.text = question.Question;
+
+       // Set question image if available (optional)
+        if (questionImage != null)
+        {
+            questionImage.sprite = question.QuestionImage; // Set the image for the question
+            questionImage.gameObject.SetActive(true); // Enable the image object
+        }
+        else
+        {
+            questionImage.gameObject.SetActive(false); // Hide the image object if no image is set
+        }
+
 
         for (int i = 0; i < question.Answers.Length; i++)
         {

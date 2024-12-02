@@ -13,6 +13,7 @@ public class QuizController : MonoBehaviour
     private void Awake()
     {
         questionCollection = FindObjectOfType<QuestionCollection>();
+        
         uiController = FindObjectOfType<UIController>();
     }
 
