@@ -1,104 +1,119 @@
-﻿using System.IO;
+﻿
+using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class QuestionCollection : MonoBehaviour
 {
-    [Header("ScriptableObjects for Questions (optional)")]
-    [Tooltip("Array of scriptable objects to use for quiz questions.")]
-    public QuestionData[] scriptableQuestions; // Array of ScriptableObject questions
+    [Header("ScriptableObject for Questions (optional)")]
+    public QuestionData[] scriptableQuestions; // Array of scriptable objects
 
-    private QuizQuestion[] allQuestions;
+    [Header("Options")]
+        [Tooltip("If enabled, any incorrectly answered questions will be asked again until answered correctly.")]
+    public bool loopQuestions = true; // Whether to loop the questions
+    public bool randomOrder = true;  // Whether to show questions in random order
 
-    private void Awake()
+    private List<QuizQuestion> allQuestions = new List<QuizQuestion>();
+    private List<int> incorrectQuestionIndices = new List<int>(); // Track indices of incorrectly answered questions
+
+    private int currentIndex = 0; // Tracks the index of the current question
+    internal static readonly object Instance;
+
+    public void MarkQuestionAsIncorrect(int index)
     {
-        if (scriptableQuestions != null && scriptableQuestions.Length > 0)
+        if (!incorrectQuestionIndices.Contains(index))
         {
-            // Load questions from the array of ScriptableObjects
-            LoadQuestionsFromScriptableObjects();
+            incorrectQuestionIndices.Add(index);
         }
-        else
-        {
-            if (!File.Exists("Questions.xml"))
-            {
-                WriteSampleQuestionsToXml();
-            }
+    }
 
-            LoadAllQuestions();
+    public int GetQuestionIndex(QuizQuestion question)
+    {
+        return allQuestions.IndexOf(question);
+    }
+
+   private void Awake()
+    {
+        LoadQuestionsFromScriptableObjects();
+
+        if (randomOrder)
+        {
+            ShuffleQuestions();
         }
+
+        // Set the total number of unique questions
+        QuizScoreManager.Instance.InitializeTotalQuestions(scriptableQuestions.Length);
     }
 
     private void LoadQuestionsFromScriptableObjects()
     {
-        // Convert each ScriptableObject into a QuizQuestion
-        allQuestions = scriptableQuestions.Select(scriptableQuestion =>
+        if (scriptableQuestions.Length > 0)
         {
-            // Convert AnswerData[] to string[] for QuizQuestion
-            string[] answerTexts = scriptableQuestion.answers.Select(a => a.answerText).ToArray();
-
-            return new QuizQuestion
-            {
-                Question = scriptableQuestion.question,
-                Answers = answerTexts,
-                CorrectAnswer = scriptableQuestion.correctAnswer,
-                QuestionImage = scriptableQuestion.questionImage // Optional question image
-            };
-        }).ToArray();
-    }
-
-    private void LoadAllQuestions()
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(QuizQuestion[]));
-        using (StreamReader streamReader = new StreamReader("Questions.xml"))
+            allQuestions = scriptableQuestions.Select(scriptableQuestion =>
+                new QuizQuestion
+                {
+                    Question = scriptableQuestion.question,
+                    Answers = scriptableQuestion.answers.Select(a => a.answerText).ToArray(),
+                    CorrectAnswer = scriptableQuestion.correctAnswer,
+                    QuestionImage = scriptableQuestion.questionImage                }).ToList();
+                /*
+                new QuizQuestion
+                {
+                    Question = scriptableQuestion.question,
+                    Answers = scriptableQuestion.answers.Select(a => a.answerText).ToArray(),
+                    CorrectAnswer = scriptableQuestion.correctAnswer,
+                    QuestionImage = scriptableQuestion.questionImage,
+                    AnswerImages = scriptableQuestion.answers.Select(a => a.answerImage).ToArray()
+                }).ToList();
+                */
+        }
+        else
         {
-            allQuestions = (QuizQuestion[])serializer.Deserialize(streamReader);
+            Debug.LogWarning("No questions available! Please assign ScriptableObjects.");
         }
     }
 
+    private void ShuffleQuestions()
+    {
+        allQuestions = allQuestions.OrderBy(_ => Random.value).ToList();
+    }
     public QuizQuestion GetUnaskedQuestion()
     {
-        ResetQuestionsIfAllHaveBeenAsked();
-
-        var question = allQuestions
-            .Where(t => t.Asked == false)
-            .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
-            .FirstOrDefault();
-
-        question.Asked = true;
-        return question;
-    }
-
-    private void ResetQuestionsIfAllHaveBeenAsked()
-    {
-        if (allQuestions.Any(t => t.Asked == false) == false)
+    // If we are at the end of the main question list
+        if (currentIndex >= allQuestions.Count)
         {
-            ResetQuestions();
+            // If looping is enabled and there are incorrect questions
+            if (loopQuestions && incorrectQuestionIndices.Count > 0)
+            {
+                // Present the incorrectly answered questions
+                var incorrectQuestions = incorrectQuestionIndices.Select(i => allQuestions[i]).ToList();
+                incorrectQuestionIndices.Clear(); // Clear the incorrect list after loading
+                allQuestions.AddRange(incorrectQuestions);
+
+                return allQuestions[currentIndex++];
+            }
+
+            // No more questions and no looping
+            return null;
         }
+
+        return allQuestions[currentIndex++];
     }
 
     private void ResetQuestions()
     {
-        foreach (var question in allQuestions)
-            question.Asked = false;
-    }
+        currentIndex = 0;
+        incorrectQuestionIndices.Clear();
 
-    /// <summary>
-    /// This method is used to generate a starting sample xml file if none exists
-    /// </summary>
-    private void WriteSampleQuestionsToXml()
-    {
-        allQuestions = new QuizQuestion[] {
-            new QuizQuestion { Question = "If it's noon in Boston, what time is it in New York",
-                Answers = new string[] { "1PM", "2PM", "Noon", "11AM" }, CorrectAnswer = 2 },
-            new QuizQuestion { Question = "What type of animal was Babe in the film of the same name",
-                Answers = new string[] { "Donkey", "Spider", "Dog", "Pig" }, CorrectAnswer = 3 },
-        };
-
-        XmlSerializer serializer = new XmlSerializer(typeof(QuizQuestion[]));
-        using (StreamWriter streamWriter = new StreamWriter("Questions.xml"))
+        if (randomOrder)
         {
-            serializer.Serialize(streamWriter, allQuestions);
+            ShuffleQuestions();
         }
     }
+
+    public void ResetQuiz()
+    {
+        ResetQuestions();
+    }
+
 }
