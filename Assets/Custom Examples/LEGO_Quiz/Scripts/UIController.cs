@@ -51,6 +51,29 @@ public class UIController : MonoBehaviour
         }
     }
 
+
+    public void SetupUIForPuzzle(PuzzleQuestion question)
+    {
+        // Hide the final score screen in case it's shown
+        finalScoreScreen.SetActive(false);
+
+        correctAnswerPopup.SetActive(false);
+        wrongAnswerPopup.SetActive(false);
+
+        questionText.text = question.Question;
+
+        // Set question image if available (optional)
+        if (questionImage != null)
+        {
+            questionImage.sprite = question.QuestionImage; // Set the image for the question
+            questionImage.gameObject.SetActive(true); // Enable the image object
+        }
+        else
+        {
+            questionImage.gameObject.SetActive(false); // Hide the image object if no image is set
+        }
+    }
+
     public void SetupUIForQuestion(QuizQuestion question)
     {
         // Hide the final score screen in case it's shown
@@ -72,6 +95,7 @@ public class UIController : MonoBehaviour
             questionImage.gameObject.SetActive(false); // Hide the image object if no image is set
         }
 
+        if (question != null){
         // Set answers
         for (int i = 0; i < question.Answers.Length; i++)
         {
@@ -92,6 +116,7 @@ public class UIController : MonoBehaviour
         for (int i = question.Answers.Length; i < answerButtons.Length; i++)
         {
             answerButtons[i].gameObject.SetActive(false);
+        }
         }
     }
 

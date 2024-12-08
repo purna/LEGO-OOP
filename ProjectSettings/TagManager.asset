@@ -9,6 +9,7 @@ TagManager:
   - Face
   - LeftHand
   - RightHand
+  - DropZone
   layers:
   - Default
   - TransparentFX
