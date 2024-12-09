@@ -180,9 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  points:
-  - {x: 0, y: 0}
-  - {x: 58.7, y: 138.4}
+  _points: []
   thickness: 20
   center: 1
 --- !u!222 &246206084
@@ -784,9 +782,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  points:
-  - {x: 0, y: 0}
-  - {x: 58.7, y: 138.4}
+  _points: []
   thickness: 6.8
   center: 1
 --- !u!222 &1744350775

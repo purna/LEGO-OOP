@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 121554387}
   - component: {fileID: 121554389}
   m_Layer: 5
-  m_Name: Correct Answer Popup
+  m_Name: Add  Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,7 +285,7 @@ RectTransform:
   m_Children:
   - {fileID: 1845009477}
   m_Father: {fileID: 1217855676}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -301,23 +301,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 123954010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 10
-    m_Bottom: 10
-  m_ChildAlignment: 1
-  m_Spacing: 50
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 10, y: 10}
+  m_Constraint: 1
+  m_ConstraintCount: 6
 --- !u!1 &212602681
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,7 +328,7 @@ GameObject:
   - component: {fileID: 212602684}
   - component: {fileID: 212602683}
   m_Layer: 5
-  m_Name: Question Panel
+  m_Name: Title Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -615,7 +613,7 @@ RectTransform:
   m_Children:
   - {fileID: 742870356}
   m_Father: {fileID: 1217855676}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -631,7 +629,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 346101988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -640,14 +638,12 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 50
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 10, y: 10}
+  m_Constraint: 1
+  m_ConstraintCount: 6
 --- !u!850595691 &433275833
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1876,12 +1872,12 @@ PrefabInstance:
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
@@ -2272,7 +2268,7 @@ GameObject:
   - component: {fileID: 1217855677}
   - component: {fileID: 1217855679}
   m_Layer: 5
-  m_Name: Answers Panel Area
+  m_Name: Inventry Panel Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2290,8 +2286,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 346101989}
   - {fileID: 123954011}
+  - {fileID: 346101989}
   - {fileID: 621296979}
   m_Father: {fileID: 1932359578}
   m_RootOrder: 3
@@ -2443,7 +2439,7 @@ GameObject:
   - component: {fileID: 1480229506}
   - component: {fileID: 1480229508}
   m_Layer: 5
-  m_Name: Wrong Answer Popup
+  m_Name: Delete Answer Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3040,7 +3036,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1682151213}
   m_Layer: 5
-  m_Name: Questions
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3226,12 +3222,12 @@ PrefabInstance:
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152853349772295899, guid: 1df5a77103e4f4165ad08e6a942505cd,
         type: 3}
