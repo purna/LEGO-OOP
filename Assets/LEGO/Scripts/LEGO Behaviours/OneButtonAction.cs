@@ -234,7 +234,7 @@ namespace Unity.LEGO.Behaviours.Controls
         {
             base.Start();
 
-            m_LayerMask = LayerMask.GetMask("Environment") | LayerMask.GetMask("Default");
+            m_LayerMask = LayerMask.GetMask("Environment") | LayerMask.GetMask("Default") | LayerMask.GetMask("Enemy") ;
 
             FindLocalGroundingCheckPoints();
 

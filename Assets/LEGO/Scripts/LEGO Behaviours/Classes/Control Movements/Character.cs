@@ -68,7 +68,7 @@ namespace Unity.LEGO.Behaviours.Controls
 
         void Start()
         {
-            m_LayerMask = LayerMask.GetMask("Environment") | LayerMask.GetMask("Default");
+            m_LayerMask = LayerMask.GetMask("Environment") | LayerMask.GetMask("Default") |  LayerMask.GetMask("Enemy");
         }
 
         public override void Setup(ModelGroup group, HashSet<Brick> bricks, List<MeshRenderer> scopedPartRenderers, Vector3 brickPivotOffset, Bounds scopedBounds, bool cameraAlignedRotation, bool cameraRelativeMovement, float gravity)
