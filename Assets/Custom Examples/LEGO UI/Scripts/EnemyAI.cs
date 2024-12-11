@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        player = GameObject.Find("Player").transform;
+        //player = GameObject.Find("Player").transform;
         navAgent = GetComponent<NavMeshAgent>();
     }
 
