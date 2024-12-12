@@ -21,7 +21,7 @@ public class CoinManager : MonoBehaviour
 
      protected  void Start()
         {
-    
+            // set positon to the coinvariable
 
             VariableManager.RegisterVariable(coinVariable);
         }

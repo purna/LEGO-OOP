@@ -10,6 +10,7 @@ TagManager:
   - LeftHand
   - RightHand
   - DropZone
+  - Enemy
   layers:
   - Default
   - TransparentFX

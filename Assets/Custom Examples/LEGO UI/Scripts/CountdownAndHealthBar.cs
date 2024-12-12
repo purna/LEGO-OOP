@@ -88,6 +88,7 @@ public class CountdownAndHealthBar : MonoBehaviour
         if (other.CompareTag("Player")) // Ensure the collider belongs to the player
         {
             playerInside = true;
+            Debug.Log("hit" + playerInside);
 
             if (healthPanel != null && !healthPanel.activeSelf)
                 healthPanel.SetActive(true); // Show the health panel
@@ -116,6 +117,7 @@ public class CountdownAndHealthBar : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInside = false;
+            Debug.Log("hit" + playerInside);
 
             if (warningPanel != null)
             {
