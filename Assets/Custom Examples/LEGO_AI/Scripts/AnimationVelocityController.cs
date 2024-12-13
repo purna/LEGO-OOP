@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using Unity.LEGO.Minifig;
 
 [RequireComponent(typeof(Animator))]
 public class AnimationVelocityController : MonoBehaviour

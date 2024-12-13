@@ -43,12 +43,19 @@ public class PlayerUIHandler : MonoBehaviour
     private float warningDuration = 2f;
     private float warningTimer;
 
+     [Header("Other")]
+
     public bool playerInside = false; // Is the player touching the object?
     private bool hasLost = false; // Flag to ensure Lose() is only called once
 
      private Coroutine warningCoroutine; // Coroutine for delaying warning panel
 
      private GameObject currentTarget;
+
+    public float sightRange;
+    public float attackRange = 1.5f;
+
+    public LayerMask groundLayer, enemyLayer;
 
 
     private void Start()
@@ -68,6 +75,34 @@ public class PlayerUIHandler : MonoBehaviour
 
         
     }
+
+
+      private void Update()
+    {
+        bool enemyInSightRange = Physics.CheckSphere(transform.position, sightRange, enemyLayer);
+        bool enemyInAttackRange = Physics.CheckSphere(transform.position, attackRange, enemyLayer);
+
+        if (enemyInSightRange && enemyInAttackRange)
+        {
+           playerInside = true;
+
+        } else {
+
+           playerInside = false;
+        }
+            
+         if (playerInside == true)
+            {
+               ShowWarningPanel(); 
+               
+            }
+            else 
+            {
+               HideWarningPanel();
+            }
+    }
+
+
    private  void FixedUpdate()
     {
         TakeDamage();
@@ -75,7 +110,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void TakeDamage()
     {
-         if (playerInside)
+         if (playerInside == true)
         {
             // Decrease health if the player is inside the collider
             currentHealth -= countdownSpeed * Time.deltaTime;

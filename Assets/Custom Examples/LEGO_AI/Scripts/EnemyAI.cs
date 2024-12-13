@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using Unity.VisualScripting;
-using Unity.LEGO.Minifig;
 
+namespace Unity.LEGO.Minifig
+{
 public class EnemyAI : MonoBehaviour
 {
      [Header("Settings")]
@@ -39,8 +39,10 @@ public class EnemyAI : MonoBehaviour
     private static readonly int VelocityParam = Animator.StringToHash("Velocity");
     private static readonly int AttackParam = Animator.StringToHash("Attack");
     private static readonly int SpecialParam = Animator.StringToHash("Play Special");
+    private static readonly int specialIdHash = Animator.StringToHash("Special Id");
 
 
+    Rigidbody rb;
 
     private void Awake()
     {
@@ -65,7 +67,7 @@ public class EnemyAI : MonoBehaviour
            Debug.LogError("PlayerUIHandler component not found on the GameObject.");
         }
 
-        hitEffect = GetComponentInChildren<ParticleSystem>();
+        hitEffect = GetComponent<ParticleSystem>();
 
         if (hitEffect == null)
         {
@@ -80,6 +82,10 @@ public class EnemyAI : MonoBehaviour
         {
            Debug.LogError("EnemyExplode component not found on the GameObject.");
         }
+
+        rb = GetComponent<Rigidbody>();
+
+       
 
 
     }
@@ -99,6 +105,8 @@ public class EnemyAI : MonoBehaviour
         }
         else if (playerInAttackRange && playerInSightRange)
         {
+            animator.SetFloat("Velocity", 0f);
+
             if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Alpha4))
             {
                 Debug.Log("Special animation key pressed.");
@@ -106,7 +114,7 @@ public class EnemyAI : MonoBehaviour
                 // Get and play the player animator
                 playerAnimator = player.GetComponent<Animator> ();
                 playerAnimator.SetBool(SpecialParam, true);
-
+                playerAnimator.SetInteger(specialIdHash, 21); // Right Kick
 
                 TakeDamage(damage);
             }
@@ -120,9 +128,6 @@ public class EnemyAI : MonoBehaviour
         {
             ChasePlayer();
         }
-
-
-
     }
 
     private void Patroling()
@@ -138,7 +143,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        //animator.SetFloat("Velocity", 0.2f);
+        animator.SetFloat("Velocity", 0.2f);
 
         if (distanceToWalkPoint.magnitude < 1f)
         {
@@ -161,9 +166,11 @@ public class EnemyAI : MonoBehaviour
    private void ChasePlayer()
 {
     navAgent.SetDestination(player.position);
-    //animator.SetFloat("Velocity", 0.6f);
+    animator.SetFloat("Velocity", 0.6f);
     navAgent.isStopped = false; // Add this line
 }
+
+
 
 
   private void AttackPlayer()
@@ -180,16 +187,11 @@ public class EnemyAI : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, attackRange))
         {
-            playerUIHandler.playerInside = true;
-            // Show the warning panel
-            playerUIHandler.ShowWarningPanel();
-        
+            //ShowPanel();
         }
         else
         {
-            playerUIHandler.playerInside = false;   
-            // Hide the warning panel 
-            playerUIHandler.HideWarningPanel();
+            //HidePanel();
         }
   
 
@@ -201,7 +203,20 @@ public class EnemyAI : MonoBehaviour
     {
         alreadyAttacked = false;
         animator.SetBool("Attack", false);
-        playerUIHandler.playerInside = false;   
+    }
+
+    private void ShowPanel()
+    {
+            playerUIHandler.playerInside = true;
+            // Show the warning panel
+            playerUIHandler.ShowWarningPanel();
+    }
+
+    private void HidePanel()
+    {
+            playerUIHandler.playerInside = false;   
+            // Hide the warning panel 
+            playerUIHandler.HideWarningPanel();
     }
 
     public void TakeDamage(float damage)
@@ -217,6 +232,8 @@ public class EnemyAI : MonoBehaviour
 
         if (health <= 0)
         {
+            Debug.Log (gameObject.name +" health :"+ health);
+            
             Invoke(nameof(DestroyEnemy), 0.5f);
         }
     }
@@ -236,16 +253,22 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator DestroyEnemyCoroutine()
     {
         animator.SetBool("Dead", true);
-        yield return new WaitForSeconds(4f);
+
+        // Freeze all position and rotation constraints
+        rb.constraints = RigidbodyConstraints.FreezeAll;
 
         if (hitEffect != null)
         {
            hitEffect.Play();
         }
 
-        enemyExplode.Explode();
+        Debug.Log("DestroyEnemyCoroutine Called");
 
-       // Destroy(gameObject);
+        enemyExplode.EnemyExploder();
+
+        yield return new WaitForSeconds(2f);
+
+        Destroy(gameObject);
         
     }
 
@@ -258,4 +281,5 @@ public class EnemyAI : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, sightRange);
     
     }
+}
 }
