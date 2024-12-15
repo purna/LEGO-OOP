@@ -74,8 +74,8 @@ namespace Unity.LEGO.Behaviours
 
             // Ignore players and projectiles.
             if (hitAbove && hitBelow
-                && !aboveHit.collider.CompareTag("Enemy") && !aboveHit.collider.CompareTag("Projectile")
-                && !belowHit.collider.CompareTag("Enemy") && !belowHit.collider.CompareTag("Projectile")
+                && !aboveHit.collider.CompareTag("Player") && !aboveHit.collider.CompareTag("Enemy") && !aboveHit.collider.CompareTag("Projectile")
+                && !belowHit.collider.CompareTag("Player") && !belowHit.collider.CompareTag("Enemy") && !belowHit.collider.CompareTag("Projectile")
             )
             {
                 var currentAbovePosition = aboveHit.point;
@@ -109,7 +109,7 @@ namespace Unity.LEGO.Behaviours
             foreach (var collider in sideColliders)
             {
                 // Ignore players and projectiles.
-                if (!collider.CompareTag("Enemy") && !collider.CompareTag("Projectile"))
+                if (!collider.CompareTag("Player") && !collider.CompareTag("Enemy") && !collider.CompareTag("Projectile"))
                 {
                     var colliderType = collider.GetType();
                     if (colliderType == typeof(BoxCollider) || colliderType == typeof(SphereCollider) || colliderType == typeof(CapsuleCollider) || (colliderType == typeof(MeshCollider) && ((MeshCollider)collider).convex))
